@@ -8,13 +8,24 @@ export const Orders = () => {
   //  Get all data when admin logs in and populate it
   // store it in redux
   const [user, setUser] = useState(users)
-  const [order, setOrder] = useState(orders)
-
+  const [ordersList, setOrdersList] = useState(orders)
+ const sortOrders = (sortBy) => {
+   const dupeOrdersList = Object.assign([], ordersList);
+   dupeOrdersList.sort(function(a, b) {
+    var keyA = a[sortBy],
+      keyB = b[sortBy];
+    // Compare the 2 dates
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+  });
+  setOrdersList(dupeOrdersList);
+ }
   return (
     <div>
       <div>
         <div>
-          <select className="controls items" name="progress" id="progress">
+          <select className="controls items" name="progress" id="progress" onChange={(e)=>sortOrders(e.target.value)}>
             <option value="id">ID</option>
             <option value="status">Status</option>
             <option value="cost">Cost</option>
@@ -34,7 +45,7 @@ export const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((e) => (
+            {ordersList.map((e) => (
 
               <tr className="orders-row">
                 <td className="id">{e.id}</td>
